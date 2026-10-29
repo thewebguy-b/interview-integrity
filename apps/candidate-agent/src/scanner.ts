@@ -51,8 +51,9 @@ export class ScannerManager {
 
   constructor(backendUrl: string = 'http://localhost:3000') {
     this.backendUrl = backendUrl;
-    // Look for target/debug/window-scanner.exe
+    // Look for target/debug/window-scanner.exe or packaged resource
     const possiblePaths = [
+      path.resolve((process as any).resourcesPath || '', 'bin/window-scanner.exe'),
       path.resolve(__dirname, '../../../target/debug/window-scanner.exe'),
       path.resolve(__dirname, '../../target/debug/window-scanner.exe'),
       path.resolve(process.cwd(), 'target/debug/window-scanner.exe'),

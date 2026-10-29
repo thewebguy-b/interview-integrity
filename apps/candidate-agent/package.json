@@ -6,7 +6,24 @@
   "scripts": {
     "dev": "tsc && electron dist/main.js",
     "build": "tsc",
+    "dist": "tsc && electron-builder --win portable",
     "start": "electron dist/main.js"
+  },
+  "build": {
+    "appId": "com.interviewintegrity.agent",
+    "productName": "Interview-Integrity-Agent",
+    "directories": {
+      "output": "dist-package"
+    },
+    "files": [
+      "dist/**/*",
+      "src/renderer/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "portable",
+      "artifactName": "Interview-Integrity-Agent.exe"
+    }
   },
   "dependencies": {
     "dotenv": "^16.4.5"

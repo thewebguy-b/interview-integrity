@@ -125,9 +125,10 @@ export function CandidatePortalPage() {
           </div>
 
           <a
-            href="/downloads/Interview-Integrity-Agent.exe"
-            download
+            href="https://github.com/thewebguy-b/interview-integrity/releases/latest/download/Interview-Integrity-Agent.exe"
             className="pill-white-btn"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               width: '100%',
               padding: '16px',

@@ -1,0 +1,50 @@
+name: Build Candidate Desktop Agent
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Build Candidate Agent TypeScript
+        run: |
+          npm run build --workspace=apps/candidate-agent
+
+      - name: Package Windows Portable Executable
+        run: |
+          cd apps/candidate-agent
+          npx --yes electron-builder --win portable --config.directories.output="dist-package" --config.win.artifactName="Interview-Integrity-Agent.exe"
+
+      - name: Upload Artifact to Workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: Interview-Integrity-Agent
+          path: apps/candidate-agent/dist-package/Interview-Integrity-Agent.exe
+
+      - name: Publish to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: apps/candidate-agent/dist-package/Interview-Integrity-Agent.exe
+          title: "Candidate Desktop Agent ${{ github.ref_name }}"
+          body: "Official standalone portable candidate companion agent for Windows 10/11."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
