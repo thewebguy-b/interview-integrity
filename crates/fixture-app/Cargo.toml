@@ -1,0 +1,22 @@
+[package]
+name = "fixture-app"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "fixture-app"
+path = "src/main.rs"
+
+[dependencies]
+event-schema = { path = "../event-schema" }
+anyhow = { workspace = true }
+log = { workspace = true }
+env_logger = { workspace = true }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winapi = { version = "0.3.9", features = [
+    "winuser",
+    "wingdi",
+    "libloaderapi",
+    "errhandlingapi",
+] }

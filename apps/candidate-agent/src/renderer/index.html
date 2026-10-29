@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Integrity Agent</title>
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .container {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .step-card.active { display: flex; }
+
+    h2 { font-size: 1.25rem; font-weight: 600; }
+    p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    input[type="text"] {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      outline: none;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.35);
+    }
+
+    .transparency-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-yes { color: var(--success); font-weight: bold; }
+    .dot-no { color: var(--danger); font-weight: bold; }
+
+    .status-pulse {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-badge">🛡️</div>
+      <div>
+        <h1 style="font-size: 1.15rem; font-weight: 700;">Interview Integrity Agent</h1>
+        <p style="font-size: 0.8rem;">Consent-based candidate desktop companion</p>
+      </div>
+    </div>
+
+    <!-- STEP 1: PAIRING CODE -->
+    <div id="step-pair" class="step-card active">
+      <h2>Enter Pairing Code</h2>
+      <p>Enter the 6-character session code provided by your interviewer to begin.</p>
+      
+      <div class="input-group">
+        <input type="text" id="code-input" maxlength="6" placeholder="ABC123" autocomplete="off" />
+        <span id="pair-error" class="error-msg"></span>
+      </div>
+
+      <button id="btn-pair" class="btn btn-primary">Connect to Interview</button>
+    </div>
+
+    <!-- STEP 2: CONSENT & TRANSPARENCY -->
+    <div id="step-consent" class="step-card">
+      <h2>Privacy &amp; Data Transparency</h2>
+      <p>Review the specific data collected by this tool before granting consent:</p>
+
+      <div class="transparency-box">
+        <div class="item-row"><span class="dot-yes">✓</span> <span>Active window title and process name</span></div>
+        <div class="item-row"><span class="dot-yes">✓</span> <span>Window capture protection flags (display affinity)</span></div>
+        <div class="item-row"><span class="dot-yes">✓</span> <span>Always-on-top window layering states</span></div>
+      </div>
+
+      <div class="transparency-box" style="border: 1px dashed rgba(239,68,68,0.3);">
+        <div class="item-row"><span class="dot-no">✕</span> <span>NO keystroke logging or typed text</span></div>
+        <div class="item-row"><span class="dot-no">✕</span> <span>NO webcam, microphone, or audio access</span></div>
+        <div class="item-row"><span class="dot-no">✕</span> <span>NO screen recordings or pixel screenshots</span></div>
+      </div>
+
+      <button id="btn-consent" class="btn btn-primary">I Consent &amp; Start Monitoring</button>
+    </div>
+
+    <!-- STEP 3: ACTIVE MONITORING -->
+    <div id="step-active" class="step-card">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2>Monitoring Active</h2>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="status-pulse"></span>
+          <span style="font-size: 0.85rem; color: var(--success); font-weight: 600;">LIVE</span>
+        </div>
+      </div>
+
+      <p>This agent is transmitting window presence metadata to your interviewer's dashboard.</p>
+
+      <div class="transparency-box">
+        <div><strong>Candidate:</strong> <span id="lbl-candidate">--</span></div>
+        <div><strong>Session:</strong> <span id="lbl-session">--</span></div>
+        <div><strong>Last Active Window:</strong> <span id="lbl-window">Scanning...</span></div>
+        <div><strong>Observed Windows:</strong> <span id="lbl-count">0</span></div>
+      </div>
+
+      <button id="btn-stop" class="btn btn-danger">Stop Monitoring &amp; Exit</button>
+    </div>
+  </div>
+
+  <script>
+    const pairStep = document.getElementById('step-pair');
+    const consentStep = document.getElementById('step-consent');
+    const activeStep = document.getElementById('step-active');
+
+    const codeInput = document.getElementById('code-input');
+    const pairError = document.getElementById('pair-error');
+    const btnPair = document.getElementById('btn-pair');
+    const btnConsent = document.getElementById('btn-consent');
+    const btnStop = document.getElementById('btn-stop');
+
+    let currentSession = null;
+
+    btnPair.addEventListener('click', async () => {
+      const code = codeInput.value.trim().toUpperCase();
+      if (code.length !== 6) {
+        pairError.textContent = 'Please enter a 6-character code.';
+        pairError.classList.add('visible');
+        return;
+      }
+
+      pairError.classList.remove('visible');
+      btnPair.disabled = true;
+      btnPair.textContent = 'Validating...';
+
+      try {
+        const result = await window.agentApi.validatePairing({ code });
+        currentSession = result;
+        pairStep.classList.remove('active');
+        consentStep.classList.add('active');
+      } catch (err) {
+        pairError.textContent = err.message || 'Failed to validate code.';
+        pairError.classList.add('visible');
+      } finally {
+        btnPair.disabled = false;
+        btnPair.textContent = 'Connect to Interview';
+      }
+    });
+
+    btnConsent.addEventListener('click', async () => {
+      btnConsent.disabled = true;
+      btnConsent.textContent = 'Starting...';
+
+      try {
+        await window.agentApi.startMonitoring({
+          sessionId: currentSession.sessionId || currentSession.session_id,
+          sessionToken: currentSession.sessionToken || currentSession.session_token || currentSession.token,
+        });
+
+        document.getElementById('lbl-candidate').textContent = currentSession.candidateName || currentSession.candidate_name || 'Candidate';
+        const sid = currentSession.sessionId || currentSession.session_id || '';
+        document.getElementById('lbl-session').textContent = sid ? sid.substring(0, 8) + '...' : 'Active';
+
+        consentStep.classList.remove('active');
+        activeStep.classList.add('active');
+      } catch (err) {
+        alert('Error starting monitoring: ' + err.message);
+        btnConsent.disabled = false;
+        btnConsent.textContent = 'I Consent & Start Monitoring';
+      }
+    });
+
+    btnStop.addEventListener('click', async () => {
+      btnStop.disabled = true;
+      btnStop.textContent = 'Stopping...';
+      await window.agentApi.stopMonitoring();
+      window.close();
+    });
+
+    if (window.agentApi?.onObservation) {
+      window.agentApi.onObservation((obs) => {
+        document.getElementById('lbl-window').textContent = obs.active || 'Desktop';
+        document.getElementById('lbl-count').textContent = obs.count || '0';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "interview-integrity",
+  "private": true,
+  "workspaces": [
+    "apps/backend",
+    "apps/interviewer-dashboard",
+    "apps/candidate-agent"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:dashboard": "npm run dev --workspace=apps/interviewer-dashboard",
+    "dev:agent": "npm run dev --workspace=apps/candidate-agent",
+    "fixture": ".\\target\\debug\\fixture-app.exe",
+    "build:all": "npm run build --workspaces",
+    "test:all": "npm run test --workspaces",
+    "lint:all": "npm run lint --workspaces"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

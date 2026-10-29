@@ -1,0 +1,32 @@
+# Node dependencies & builds
+node_modules/
+dist/
+dist-ssr/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Rust build artifacts
+target/
+Cargo.lock
+
+# Environment & local state
+.env
+.env.local
+.env.*.local
+.local_sessions.json
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Electron build artifacts
+apps/candidate-agent/dist/
+apps/candidate-agent/release/
+
+# Temporary files
+*.timestamp-*.mjs
+
