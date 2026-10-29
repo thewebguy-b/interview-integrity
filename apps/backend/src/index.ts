@@ -55,7 +55,15 @@ async function bootstrap(): Promise<void> {
   await app.register(agentRoutes, { prefix: '/api' });
   await app.register(wsRoutes, { prefix: '/api' });
 
-  // ── Health check ──────────────────────────────────────────────────────────
+  // ── Health check & Root ───────────────────────────────────────────────────
+
+  app.get('/', async () => ({
+    name: 'Interview Integrity Telemetry Backend',
+    status: 'online',
+    version: '1.0.0',
+    health: '/health',
+    api: '/api/sessions',
+  }));
 
   app.get('/health', async () => ({
     status: 'ok',
