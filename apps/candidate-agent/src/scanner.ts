@@ -66,6 +66,12 @@ export class ScannerManager {
     this.sessionToken = token;
   }
 
+  setBackendUrl(url: string) {
+    if (url) {
+      this.backendUrl = url;
+    }
+  }
+
   async runSingleScan(): Promise<ScanResult> {
     if (fs.existsSync(this.binaryPath)) {
       try {

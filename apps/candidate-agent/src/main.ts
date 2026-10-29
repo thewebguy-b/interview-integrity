@@ -45,7 +45,8 @@ app.on('window-all-closed', async () => {
 
 // IPC handlers
 ipcMain.handle('pairing:validate', async (_event, { code, backendUrl }) => {
-  const url = backendUrl || 'http://localhost:3000';
+  const url = backendUrl || process.env.BACKEND_URL || 'http://localhost:3000';
+  scanner.setBackendUrl(url);
   const res = await fetch(`${url}/api/pairing/validate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -61,6 +62,9 @@ ipcMain.handle('pairing:validate', async (_event, { code, backendUrl }) => {
 });
 
 ipcMain.handle('monitoring:start', async (_event, { sessionId, sessionToken, backendUrl }) => {
+  if (backendUrl) {
+    scanner.setBackendUrl(backendUrl);
+  }
   scanner.setSession(sessionId, sessionToken);
   scanner.start(
     (scan) => {
