@@ -26,6 +26,9 @@ Thumbs.db
 # Electron build artifacts
 apps/candidate-agent/dist/
 apps/candidate-agent/release/
+apps/candidate-agent/dist-package/
+Interview-Integrity-Agent.exe
+*.exe
 
 # Temporary files
 *.timestamp-*.mjs

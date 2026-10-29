@@ -1,6 +1,8 @@
 {
   "name": "candidate-agent",
   "version": "0.1.0",
+  "description": "Interview Integrity Candidate Companion Agent",
+  "author": "Interview Integrity Team",
   "private": true,
   "main": "dist/main.js",
   "scripts": {
@@ -12,6 +14,7 @@
   "build": {
     "appId": "com.interviewintegrity.agent",
     "productName": "Interview-Integrity-Agent",
+    "electronVersion": "31.2.0",
     "directories": {
       "output": "dist-package"
     },
@@ -28,7 +31,7 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "electron": "^31.2.0",
+    "electron": "31.2.0",
     "typescript": "^5.5.3",
     "@types/node": "^20.14.10"
   }
