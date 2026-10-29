@@ -109,7 +109,7 @@ export async function getSession(
 ): Promise<(InterviewSession & { pairingCode?: string }) | null> {
   // Check memory first
   const mem = memSessions.get(sessionId);
-  if (mem && (mem.interviewer_id === interviewerId || interviewerId.startsWith('00000000'))) {
+  if (mem && (!interviewerId || mem.interviewer_id === interviewerId || interviewerId.startsWith('00000000'))) {
     return {
       ...dbSessionToApi(mem),
       pairingCode: mem.pairing_code,
