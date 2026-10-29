@@ -2,8 +2,9 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import { ScannerManager } from './scanner.js';
 
+const DEFAULT_BACKEND_URL = process.env.BACKEND_URL || 'https://interview-integrity-backend.onrender.com';
 let mainWindow: BrowserWindow | null = null;
-const scanner = new ScannerManager(process.env.BACKEND_URL || 'http://localhost:3000');
+const scanner = new ScannerManager(DEFAULT_BACKEND_URL);
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -45,7 +46,7 @@ app.on('window-all-closed', async () => {
 
 // IPC handlers
 ipcMain.handle('pairing:validate', async (_event, { code, backendUrl }) => {
-  const url = backendUrl || process.env.BACKEND_URL || 'http://localhost:3000';
+  const url = backendUrl || DEFAULT_BACKEND_URL;
   scanner.setBackendUrl(url);
   const res = await fetch(`${url}/api/pairing/validate`, {
     method: 'POST',

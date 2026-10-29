@@ -21,7 +21,7 @@ interface Props {
   token?: string;
 }
 
-export function SessionsPage({ interviewerEmail, onSignOut, backendUrl = 'http://localhost:3000', token }: Props) {
+export function SessionsPage({ interviewerEmail, onSignOut, backendUrl = 'https://interview-integrity-backend.onrender.com', token }: Props) {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<InterviewSession[]>([]);
   const [loading, setLoading] = useState(true);

@@ -24,7 +24,7 @@ interface Props {
   token?: string;
 }
 
-export function LiveSessionPage({ backendUrl = 'http://localhost:3000', token }: Props) {
+export function LiveSessionPage({ backendUrl = 'https://interview-integrity-backend.onrender.com', token }: Props) {
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
 

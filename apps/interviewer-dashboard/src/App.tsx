@@ -8,7 +8,7 @@ import { SessionsPage } from './pages/SessionsPage.js';
 import { LiveSessionPage } from './pages/LiveSessionPage.js';
 import { SessionReviewPage } from './pages/SessionReviewPage.js';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://interview-integrity-backend.onrender.com';
 
 export function App() {
   const { session, loading, error, signIn, demoSignIn, signOut } = useAuth();
