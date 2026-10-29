@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
+permissions:
+  contents: write
 
 jobs:
   build-windows:
@@ -21,23 +22,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install root dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Build Candidate Agent TypeScript
-        run: |
-          npm run build --workspace=apps/candidate-agent
+        run: npm run build --workspace=apps/candidate-agent
 
       - name: Package Windows Portable Executable
         run: |
           cd apps/candidate-agent
           npx --yes electron-builder --win portable --config.directories.output="dist-package" --config.win.artifactName="Interview-Integrity-Agent.exe"
 
-      - name: Upload Artifact to Workflow
-        uses: actions/upload-artifact@v4
-        with:
-          name: Interview-Integrity-Agent
-          path: apps/candidate-agent/dist-package/Interview-Integrity-Agent.exe
+      - name: Check Built Output
+        shell: pwsh
+        run: |
+          Get-ChildItem -Path apps/candidate-agent/dist-package/
 
       - name: Publish to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
