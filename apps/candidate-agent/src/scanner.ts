@@ -74,20 +74,12 @@ export class ScannerManager {
   }
 
   async runSingleScan(): Promise<ScanResult> {
-    if (fs.existsSync(this.binaryPath)) {
-      try {
-        const { stdout } = await execFileAsync(this.binaryPath, ['--once', '--json']);
-        const parsed = JSON.parse(stdout) as ScanResult;
-        if (parsed.observations && parsed.observations.length > 0) {
-          return parsed;
-        }
-      } catch (err: any) {
-        console.warn('[ScannerManager] Native scanner execution warning:', err.message);
-      }
-    }
+    // ─── Step 1: ALWAYS run tasklist-based process scanner (primary detection) ───
+    // NOTE: We do NOT early-return from native binary anymore. The Rust binary
+    // was returning ~294 empty {} objects with no names, bypassing keyword detection.
+    let tasklistObservations: WindowObservation[] = [];
+    let nativeObservations: WindowObservation[] = [];
 
-    // Dynamic Windows Process & Window Enumerator
-    let realObservations: WindowObservation[] = [];
     if (process.platform === 'win32') {
       try {
         const { exec } = await import('node:child_process');
@@ -95,11 +87,12 @@ export class ScannerManager {
         const execAsync = util.promisify(exec);
         const { stdout } = await execAsync('tasklist /v /fo csv');
         const lines = stdout.trim().split('\n');
-        
+
         const suspiciousKeywords = [
           'interviewcoder', 'cluely', 'cheat', 'copilot', 'teleprompter',
           'finalround', 'chatgpt', 'pyoverlay', 'stealth', 'phantom', 'ghost',
-          'fixture-app', 'overlay', 'assistant'
+          'fixture-app', 'overlay', 'assistant', 'claude', 'gemini',
+          'perplexity', 'gpt', 'openai', 'screenpipe', 'glean', 'glados',
         ];
 
         for (let i = 1; i < lines.length; i++) {
@@ -108,7 +101,9 @@ export class ScannerManager {
           const matches = line.match(/(?:^|,)("(?:[^"]|"")*"|[^,]*)/g);
           if (!matches || matches.length < 9) continue;
 
-          const clean = matches.map((m) => m.replace(/^,/, '').replace(/^"/, '').replace(/"$/, '').replace(/""/g, '"'));
+          const clean = matches.map((m) =>
+            m.replace(/^,/, '').replace(/^"/, '').replace(/"$/, '').replace(/""/g, '"')
+          );
           const imageName = (clean[0] || '').toLowerCase();
           const pid = parseInt(clean[1], 10) || 0;
           const windowTitle = clean[8] || '';
@@ -117,9 +112,10 @@ export class ScannerManager {
             imageName.includes(k) || windowTitle.toLowerCase().includes(k)
           );
 
+          // Always include suspicious apps; also include windowed processes (non N/A title)
           if (windowTitle === 'N/A' && !isSuspicious) continue;
 
-          realObservations.push({
+          tasklistObservations.push({
             window_id: `win-${pid}`,
             process_id: pid,
             process_name: imageName,
@@ -137,13 +133,49 @@ export class ScannerManager {
             },
           });
         }
+        console.log(
+          `[ScannerManager] Tasklist scan: ${tasklistObservations.length} windowed processes found, ` +
+          `${tasklistObservations.filter((o) => o.capture_affinity.value === 'exclude').length} suspicious`
+        );
       } catch (err: any) {
-        console.warn('[ScannerManager] Live window enumeration fallback warning:', err.message);
+        console.warn('[ScannerManager] Tasklist enumeration warning:', err.message);
       }
     }
 
-    if (realObservations.length === 0) {
-      realObservations = [
+    // ─── Step 2: Try native Rust scanner for capture-affinity data (supplemental) ───
+    if (fs.existsSync(this.binaryPath)) {
+      try {
+        const { stdout } = await execFileAsync(this.binaryPath, ['--once', '--json']);
+        const parsed = JSON.parse(stdout) as ScanResult;
+        // Only use native results if they have actual process names (non-empty objects)
+        if (parsed.observations && parsed.observations.length > 0) {
+          const richObs = parsed.observations.filter(
+            (o: WindowObservation) => o.process_name && o.process_name.trim().length > 0
+          );
+          if (richObs.length > 0) {
+            nativeObservations = richObs;
+            console.log(`[ScannerManager] Native scanner: ${richObs.length} rich observations`);
+          } else {
+            console.log(
+              `[ScannerManager] Native scanner returned ${parsed.observations.length} empty objects — ` +
+              `ignoring and using tasklist results`
+            );
+          }
+        }
+      } catch (err: any) {
+        console.warn('[ScannerManager] Native scanner execution warning:', err.message);
+      }
+    }
+
+    // ─── Step 3: Merge — tasklist is primary (has names), native is supplemental ───
+    let merged: WindowObservation[] = tasklistObservations;
+    if (merged.length === 0 && nativeObservations.length > 0) {
+      merged = nativeObservations;
+    }
+
+    // If still empty, use a placeholder so the dashboard knows the agent is alive
+    if (merged.length === 0) {
+      merged = [
         {
           window_id: 'win-1',
           process_id: process.pid,
@@ -170,7 +202,7 @@ export class ScannerManager {
         can_read_window_titles: true,
         known_limitations: [],
       },
-      observations: realObservations,
+      observations: merged,
       scanner_errors: [],
     };
   }
