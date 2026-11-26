@@ -6,21 +6,25 @@
   <title>Interview Integrity Agent</title>
   <style>
     :root {
-      --bg-base: #090d16;
-      --bg-card: rgba(17, 24, 39, 0.7);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --success: #10b981;
-      --danger: #ef4444;
-      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --bg-cream: #FDF4EC;
+      --bg-card: #FFFFFF;
+      --bg-stone: #F5F5F4;
+      --border-color: #E5E7EB;
+      --accent: #E54500;
+      --accent-hover: #C23800;
+      --text-main: #111315;
+      --text-muted: #4B5563;
+      --text-subtle: #6B7280;
+      --success: #059669;
+      --danger: #E11D48;
+      --font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: var(--bg-base);
+      background: var(--bg-cream);
       color: var(--text-main);
       font-family: var(--font-family);
       min-height: 100vh;
@@ -28,49 +32,104 @@
       flex-direction: column;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .container {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
+    /* Animated Halo Gradient Header matching main website (#d0bce1 -> #dbba95 -> #ff5005) */
+    .hero-banner {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #d0bce1 0%, #dbba95 45%, #ff5005 100%);
+      background-size: 200% 200%;
+      animation: haloShift 10s ease-in-out infinite alternate;
+      color: #FFFFFF;
+      padding: 22px 24px 0;
+    }
+
+    @keyframes haloShift {
+      0% { background-position: 0% 35%; }
+      100% { background-position: 100% 65%; }
     }
 
     .header {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 24px;
+      padding-bottom: 18px;
+      position: relative;
+      z-index: 2;
     }
 
     .logo-badge {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      background: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 14px rgba(17, 19, 21, 0.16);
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-subtitle {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-top: 2px;
+    }
+
+    /* Signature S-wave ribbon matching website */
+    .wave-ribbon {
+      height: 38px;
+      width: calc(100% + 48px);
+      margin-left: -24px;
+      background-color: transparent;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='56' viewBox='0 0 60 56'%3E%3Cpath d='M0 22 C28 22 32 2 60 2 L60 18 C32 18 28 36 0 36 Z' fill='%23FDF4EC'/%3E%3Cpath d='M0 56 C28 56 32 36 60 36 L60 56 Z' fill='%23FDF4EC'/%3E%3C/svg%3E");
+      background-size: 42px 38px;
+      background-repeat: repeat-x;
+    }
+
+    .container {
+      padding: 20px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: center;
     }
 
     .step-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 18px 40px -12px rgba(17, 19, 21, 0.08);
       display: none;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
     .step-card.active { display: flex; }
 
-    h2 { font-size: 1.25rem; font-weight: 600; }
-    p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
 
     .input-group {
       display: flex;
@@ -79,126 +138,210 @@
     }
 
     input[type="text"] {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: #fff;
-      font-size: 1.1rem;
-      letter-spacing: 2px;
+      background: #F9FAFB;
+      border: 1.5px solid #D1D5DB;
+      border-radius: 10px;
+      padding: 13px 16px;
+      color: var(--text-main);
+      font-size: 1.2rem;
+      letter-spacing: 3px;
       text-transform: uppercase;
       outline: none;
       text-align: center;
       font-weight: 700;
+      font-family: var(--font-mono);
+      transition: all 0.15s ease;
+    }
+
+    input[type="text"]::placeholder {
+      color: #9CA3AF;
     }
 
     input[type="text"]:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(229, 69, 0, 0.15);
     }
 
     .btn {
       padding: 12px 20px;
-      border-radius: 8px;
+      border-radius: 9px;
       border: none;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      font-family: inherit;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .btn-primary {
       background: var(--accent);
-      color: white;
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(229, 69, 0, 0.28);
     }
 
-    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
 
     .btn-danger {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      color: #fca5a5;
+      background: #FFF1F2;
+      border: 1px solid #FECDD3;
+      color: #E11D48;
     }
 
-    .btn-danger:hover {
-      background: rgba(239, 68, 68, 0.35);
+    .btn-danger:hover:not(:disabled) {
+      background: #FFE4E6;
     }
 
     .transparency-box {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 8px;
-      padding: 14px;
-      font-size: 0.85rem;
+      background: var(--bg-stone);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.84rem;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
+      color: var(--text-main);
+    }
+
+    .transparency-box.danger-box {
+      background: #FFF1F2;
+      border-color: #FECDD3;
     }
 
     .item-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 9px;
     }
 
-    .dot-yes { color: var(--success); font-weight: bold; }
-    .dot-no { color: var(--danger); font-weight: bold; }
+    .dot-yes { color: var(--success); font-weight: 700; }
+    .dot-no { color: var(--danger); font-weight: 700; }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      color: #059669;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
 
     .status-pulse {
       display: inline-block;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--success);
-      box-shadow: 0 0 10px var(--success);
+      box-shadow: 0 0 8px var(--success);
       animation: pulse 1.8s infinite;
     }
 
     @keyframes pulse {
       0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 1; }
       100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .telemetry-cell {
+      background: var(--bg-stone);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 11px 13px;
+    }
+
+    .telemetry-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .telemetry-value {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .error-msg {
       color: var(--danger);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 600;
       display: none;
+      text-align: center;
     }
 
     .error-msg.visible { display: block; }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      margin-top: 16px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="hero-banner">
     <div class="header">
-      <div class="logo-badge">🛡️</div>
+      <div class="logo-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E54500" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
       <div>
-        <h1 style="font-size: 1.15rem; font-weight: 700;">Interview Integrity Agent</h1>
-        <p style="font-size: 0.8rem;">Consent-based candidate desktop companion</p>
+        <div class="header-title">Interview Integrity Agent</div>
+        <div class="header-subtitle">Consent-based candidate desktop companion</div>
       </div>
     </div>
+    <div class="wave-ribbon"></div>
+  </div>
 
+  <div class="container">
     <!-- STEP 1: PAIRING CODE -->
     <div id="step-pair" class="step-card active">
       <h2>Enter Pairing Code</h2>
       <p>Enter the 6-character session code provided by your interviewer to begin.</p>
-      
+
       <div class="input-group">
         <input type="text" id="code-input" maxlength="6" placeholder="ABC123" autocomplete="off" />
         <span id="pair-error" class="error-msg"></span>
       </div>
 
-      <button id="btn-pair" class="btn btn-primary">Connect to Interview</button>
+      <button id="btn-pair" class="btn btn-primary">Connect to Interview &rarr;</button>
     </div>
 
     <!-- STEP 2: CONSENT & TRANSPARENCY -->
     <div id="step-consent" class="step-card">
       <h2>Privacy &amp; Data Transparency</h2>
-      <p>Review the specific data collected by this tool before granting consent:</p>
+      <p>Review the specific data collected by this companion before granting consent:</p>
 
       <div class="transparency-box">
         <div class="item-row"><span class="dot-yes">✓</span> <span>Active window title and process name</span></div>
@@ -206,7 +349,7 @@
         <div class="item-row"><span class="dot-yes">✓</span> <span>Always-on-top window layering states</span></div>
       </div>
 
-      <div class="transparency-box" style="border: 1px dashed rgba(239,68,68,0.3);">
+      <div class="transparency-box danger-box">
         <div class="item-row"><span class="dot-no">✕</span> <span>NO keystroke logging or typed text</span></div>
         <div class="item-row"><span class="dot-no">✕</span> <span>NO webcam, microphone, or audio access</span></div>
         <div class="item-row"><span class="dot-no">✕</span> <span>NO screen recordings or pixel screenshots</span></div>
@@ -219,22 +362,38 @@
     <div id="step-active" class="step-card">
       <div style="display: flex; align-items: center; justify-content: space-between;">
         <h2>Monitoring Active</h2>
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="live-pill">
           <span class="status-pulse"></span>
-          <span style="font-size: 0.85rem; color: var(--success); font-weight: 600;">LIVE</span>
+          <span>LIVE</span>
         </div>
       </div>
 
-      <p>This agent is transmitting window presence metadata to your interviewer's dashboard.</p>
+      <p>This agent is transmitting workspace metadata to your interviewer's dashboard.</p>
 
-      <div class="transparency-box">
-        <div><strong>Candidate:</strong> <span id="lbl-candidate">--</span></div>
-        <div><strong>Session:</strong> <span id="lbl-session">--</span></div>
-        <div><strong>Last Active Window:</strong> <span id="lbl-window">Scanning...</span></div>
-        <div><strong>Observed Windows:</strong> <span id="lbl-count">0</span></div>
+      <div class="telemetry-grid">
+        <div class="telemetry-cell">
+          <div class="telemetry-label">Candidate</div>
+          <div class="telemetry-value" id="lbl-candidate">--</div>
+        </div>
+        <div class="telemetry-cell">
+          <div class="telemetry-label">Session ID</div>
+          <div class="telemetry-value" id="lbl-session" style="font-family: var(--font-mono);">--</div>
+        </div>
+        <div class="telemetry-cell">
+          <div class="telemetry-label">Active Window</div>
+          <div class="telemetry-value" id="lbl-window">Scanning...</div>
+        </div>
+        <div class="telemetry-cell">
+          <div class="telemetry-label">Observed Windows</div>
+          <div class="telemetry-value" id="lbl-count" style="color: var(--accent);">0</div>
+        </div>
       </div>
 
       <button id="btn-stop" class="btn btn-danger">Stop Monitoring &amp; Exit</button>
+    </div>
+
+    <div class="footer-note">
+      Zero installation • Zero keylogs • Close anytime after interview
     </div>
   </div>
 
@@ -273,7 +432,7 @@
         pairError.classList.add('visible');
       } finally {
         btnPair.disabled = false;
-        btnPair.textContent = 'Connect to Interview';
+        btnPair.textContent = 'Connect to Interview →';
       }
     });
 

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth.js';
 import { LandingPage } from './pages/LandingPage.js';
 import { CandidatePortalPage } from './pages/CandidatePortalPage.js';
+import { TechnicalOverviewPage } from './pages/TechnicalOverviewPage.js';
 import { LoginPage } from './pages/LoginPage.js';
 import { SessionsPage } from './pages/SessionsPage.js';
 import { LiveSessionPage } from './pages/LiveSessionPage.js';
@@ -19,8 +20,10 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
+        
         {/* Public Landing & Candidate Portal */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/technical-overview" element={<TechnicalOverviewPage />} />
         <Route path="/join" element={<CandidatePortalPage />} />
         <Route path="/candidate" element={<CandidatePortalPage />} />
 

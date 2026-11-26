@@ -1,237 +1,175 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ShaderBackground } from '../components/ShaderBackground.js';
 import {
   Download,
   ShieldCheck,
   CheckCircle2,
   XCircle,
-  HelpCircle,
-  ExternalLink,
-  Laptop,
-  ArrowRight,
   Shield,
-  Lock,
   ArrowLeft,
-  Terminal,
-  Feather,
 } from 'lucide-react';
 
 export function CandidatePortalPage() {
   const navigate = useNavigate();
 
   return (
-    <div style={{
-      background: 'linear-gradient(180deg, #070B12 0%, #0A121A 40%, #0F1A1E 100%)',
-      minHeight: '100vh',
-      color: '#F8FAFC',
-      padding: '40px 24px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      position: 'relative',
-    }}>
-      
-      {/* Ambient background glow */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '100vh',
-        pointerEvents: 'none',
-        zIndex: 0,
-        backgroundImage: `radial-gradient(circle at 50% 10%, rgba(68, 120, 80, 0.15) 0%, transparent 60%), radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.08) 0%, transparent 50%)`,
-      }} />
+    <div className="ref-page" style={{ background: 'var(--ref-pink)' }}>
+      {/* Shader Top Banner */}
+      <ShaderBackground style={{ padding: '24px 0 0' }}>
+        <div className="ref-container" style={{ maxWidth: '820px', paddingBottom: '48px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
+            <button
+              onClick={() => navigate('/')}
+              className="ref-btn ref-btn-ghost-light"
+              style={{ padding: '8px 14px', fontSize: '0.84rem' }}
+            >
+              <ArrowLeft size={15} />
+              <span>Return to Overview</span>
+            </button>
 
-      {/* Top Bar Back Link */}
-      <div style={{ maxWidth: '680px', width: '100%', marginBottom: '28px', position: 'relative', zIndex: 10 }}>
-        <button
-          onClick={() => navigate('/')}
-          className="pill-capsule-nav"
-          style={{
-            border: '1px solid rgba(255, 255, 255, 0.18)',
-            background: 'rgba(255, 255, 255, 0.08)',
-            color: '#F8FAFC',
-            fontSize: '0.85rem',
-            cursor: 'pointer',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '8px 18px',
-            transition: 'all 0.2s',
-          }}
-        >
-          <ArrowLeft size={15} />
-          <span>Return to Overview</span>
-        </button>
-      </div>
-
-      <div style={{ maxWidth: '680px', width: '100%', position: 'relative', zIndex: 10 }}>
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{
-            width: 48,
-            height: 48,
-            borderRadius: '50%',
-            background: 'rgba(255, 255, 255, 0.15)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(255, 255, 255, 0.2)',
-            marginBottom: '16px',
-          }}>
-            <Shield size={24} color="white" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: 26, height: 26, borderRadius: 6, background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Shield size={14} color="#E54500" />
+              </div>
+              <span className="ref-heading" style={{ fontWeight: 700, fontSize: '0.95rem' }}>Interview Integrity</span>
+            </div>
           </div>
 
-          <h1 className="font-heading" style={{ fontSize: 'clamp(2.2rem, 4vw, 3rem)', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: '10px' }}>
-            Candidate Interview <span className="font-editorial" style={{ fontSize: '1.2em' }}>Companion</span>
+          <div className="ref-eyebrow" style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '10px' }}>
+            CANDIDATE PORTAL
+          </div>
+          <h1 className="ref-heading" style={{ fontSize: 'clamp(2rem, 4vw, 2.8rem)', fontWeight: 700, marginBottom: '10px' }}>
+            Candidate Interview Companion
           </h1>
-          <p style={{ color: '#94A3B8', fontSize: '1.05rem', maxWidth: '480px', margin: '0 auto', lineHeight: 1.6 }}>
-            A lightweight, consent-based companion utility for your upcoming technical interview.
+          <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: '1.02rem', maxWidth: '560px', lineHeight: 1.55 }}>
+            A lightweight, consent-based desktop utility for your upcoming technical interview. Zero installation and zero admin rights required.
           </p>
         </div>
+        <div className="ref-ribbon-blue-pink" />
+      </ShaderBackground>
 
+      {/* Main Content Cards */}
+      <main className="ref-container" style={{ maxWidth: '820px', padding: '40px 24px 72px' }}>
         {/* Download Card */}
-        <div className="pro-glass-panel" style={{
-          padding: '40px 36px',
-          marginBottom: '28px',
-          borderRadius: 28,
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderColor: 'rgba(255, 255, 255, 0.12)',
-          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.4)',
-        }}>
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <div style={{ display: 'inline-flex', marginBottom: '16px' }}>
+        <div className="ref-card-elevated" style={{ padding: '36px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+            <div>
               <span style={{
-                background: 'rgba(16, 185, 129, 0.12)',
-                border: '1px solid rgba(16, 185, 129, 0.35)',
-                color: '#34D399',
-                padding: '4px 16px',
-                borderRadius: 99,
-                fontSize: '0.78rem',
-                fontWeight: 600,
+                display: 'inline-block',
+                background: '#ECFDF5',
+                border: '1px solid #A7F3D0',
+                color: '#059669',
+                padding: '4px 12px',
+                borderRadius: '999px',
+                fontSize: '0.74rem',
+                fontWeight: 700,
                 letterSpacing: '0.04em',
+                marginBottom: '12px',
               }}>
                 ✓ WINDOWS 10 / 11 COMPATIBLE • PORTABLE .EXE
               </span>
+              <h2 className="ref-heading" style={{ fontSize: '1.5rem', fontWeight: 700, color: '#111315' }}>
+                Download Candidate Agent
+              </h2>
+              <p style={{ color: 'var(--ref-slate)', fontSize: '0.92rem', marginTop: '4px' }}>
+                Single standalone executable • Zero system installation • No admin rights required
+              </p>
             </div>
-
-            <h2 className="font-heading" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '8px' }}>
-              Download Candidate Agent
-            </h2>
-            <p style={{ color: '#94A3B8', fontSize: '0.92rem' }}>
-              Single standalone executable (~18MB) • Zero system installation • No admin rights required
-            </p>
           </div>
 
           <a
             href="https://github.com/thewebguy-b/interview-integrity/releases/latest/download/Interview-Integrity-Agent.exe"
-            className="pill-white-btn"
+            className="ref-btn ref-btn-cobalt"
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              width: '100%',
-              padding: '16px',
-              fontSize: '1.05rem',
-              justifyContent: 'center',
-            }}
+            style={{ width: '100%', padding: '15px 24px', fontSize: '1rem' }}
           >
-            <Download size={19} />
+            <Download size={18} />
             <span>Download for Windows (Portable .exe)</span>
           </a>
 
-          {/* Quick Steps */}
+          {/* 3-Step Guide */}
           <div style={{
             marginTop: '24px',
-            padding: '18px 20px',
-            background: 'rgba(255, 255, 255, 0.03)',
-            borderRadius: 16,
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            fontSize: '0.88rem',
-            color: '#CBD5E1',
+            padding: '20px',
+            background: '#F8F9FB',
+            borderRadius: '14px',
+            border: '1px solid #E5E7EB',
+            fontSize: '0.9rem',
           }}>
-            <strong style={{ color: '#F8FAFC', display: 'block', marginBottom: '8px' }}>
+            <strong style={{ color: '#111315', display: 'block', marginBottom: '8px' }}>
               3-Step Quick Setup:
             </strong>
-            <ol style={{ paddingLeft: '20px', margin: 0, lineHeight: 1.8, color: '#94A3B8' }}>
-              <li>Double-click the downloaded <code>Interview-Integrity-Agent.exe</code>.</li>
+            <ol style={{ paddingLeft: '20px', margin: 0, lineHeight: 1.8, color: 'var(--ref-slate)' }}>
+              <li>Double-click the downloaded <code>Interview-Integrity-Agent.exe</code> (if SmartScreen appears, click <em>More info &rarr; Run anyway</em>).</li>
               <li>Enter the single-use 6-character room code from your interview invite.</li>
-              <li>Click <strong>"Connect &amp; Start Monitoring"</strong> right before your Zoom call begins.</li>
+              <li>Click <strong>&quot;I Consent &amp; Start Monitoring&quot;</strong> right before your video call begins.</li>
             </ol>
           </div>
         </div>
 
-        {/* Candidate Privacy Guarantee Card */}
-        <div className="pro-glass-panel" style={{
-          padding: '36px',
-          borderRadius: 28,
-          background: 'rgba(255, 255, 255, 0.04)',
-          borderColor: 'rgba(255, 255, 255, 0.1)',
-        }}>
+        {/* Privacy Guarantee Card */}
+        <div className="ref-card-elevated" style={{ padding: '36px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
             <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.15)',
+              width: 40,
+              height: 40,
+              borderRadius: '10px',
+              background: '#ECFDF5',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <ShieldCheck size={20} color="#34D399" />
+              <ShieldCheck size={22} color="#059669" />
             </div>
             <div>
-              <h3 className="font-heading" style={{ fontSize: '1.18rem', fontWeight: 700, margin: 0 }}>
+              <h3 className="ref-heading" style={{ fontSize: '1.2rem', fontWeight: 700, color: '#111315' }}>
                 Candidate Privacy Guarantee
               </h3>
-              <span style={{ fontSize: '0.78rem', color: '#64748B' }}>Zero surveillance • Absolute transparency</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--ref-muted)' }}>Zero surveillance • Absolute transparency</span>
             </div>
           </div>
 
-          <p style={{ color: '#94A3B8', fontSize: '0.92rem', lineHeight: '1.65', marginBottom: '20px' }}>
-            We believe technical interviews should be fair, respectful, and non-intrusive. This tool operates strictly under zero-knowledge privacy boundaries:
+          <p style={{ color: 'var(--ref-slate)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '20px' }}>
+            Technical interviews should be fair, respectful, and non-intrusive. This companion operates strictly under zero-knowledge privacy boundaries:
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '0.9rem' }}>
             <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-              <CheckCircle2 size={18} color="#34D399" style={{ flexShrink: 0, marginTop: 2 }} />
+              <CheckCircle2 size={18} color="#059669" style={{ flexShrink: 0, marginTop: 2 }} />
               <div>
-                <strong style={{ color: '#F1F5F9' }}>Only Window Metadata:</strong>
-                <span style={{ color: '#94A3B8' }}> Reads active window titles, HWND handles, and DWM display affinities.</span>
+                <strong style={{ color: '#111315' }}>Only Window Metadata:</strong>
+                <span style={{ color: 'var(--ref-slate)' }}> Reads active window titles, process names, and display-capture flags.</span>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-              <XCircle size={18} color="#F43F5E" style={{ flexShrink: 0, marginTop: 2 }} />
+              <XCircle size={18} color="#E11D48" style={{ flexShrink: 0, marginTop: 2 }} />
               <div>
-                <strong style={{ color: '#F1F5F9' }}>Zero Keystroke Logging:</strong>
-                <span style={{ color: '#94A3B8' }}> Passwords, terminal commands, and typed text are strictly inaccessible.</span>
+                <strong style={{ color: '#111315' }}>Zero Keystroke Logging:</strong>
+                <span style={{ color: 'var(--ref-slate)' }}> Passwords, terminal commands, and typed text are never accessed.</span>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-              <XCircle size={18} color="#F43F5E" style={{ flexShrink: 0, marginTop: 2 }} />
+              <XCircle size={18} color="#E11D48" style={{ flexShrink: 0, marginTop: 2 }} />
               <div>
-                <strong style={{ color: '#F1F5F9' }}>Zero Camera or Audio Surveillance:</strong>
-                <span style={{ color: '#94A3B8' }}> Webcam feeds and microphone inputs are physically excluded from this binary.</span>
+                <strong style={{ color: '#111315' }}>Zero Camera or Audio Surveillance:</strong>
+                <span style={{ color: 'var(--ref-slate)' }}> Webcam feeds and microphone inputs are excluded from this binary.</span>
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-              <XCircle size={18} color="#F43F5E" style={{ flexShrink: 0, marginTop: 2 }} />
+              <XCircle size={18} color="#E11D48" style={{ flexShrink: 0, marginTop: 2 }} />
               <div>
-                <strong style={{ color: '#F1F5F9' }}>Zero Screen Capturing:</strong>
-                <span style={{ color: '#94A3B8' }}> Does not capture screenshots, video feeds, or screen buffer pixels.</span>
+                <strong style={{ color: '#111315' }}>Zero Screen Capturing:</strong>
+                <span style={{ color: 'var(--ref-slate)' }}> Does not capture screenshots, video feeds, or screen buffer pixels.</span>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Footer info */}
-        <div style={{ textAlign: 'center', marginTop: '36px', color: '#64748B', fontSize: '0.84rem' }}>
-          Interview Integrity Platform • Cryptographic Zero-Knowledge Architecture
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

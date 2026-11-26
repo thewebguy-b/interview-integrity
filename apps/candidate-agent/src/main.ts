@@ -8,12 +8,13 @@ const scanner = new ScannerManager(DEFAULT_BACKEND_URL);
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 540,
+    width: 520,
     height: 700,
-    minWidth: 480,
-    minHeight: 600,
+    minWidth: 460,
+    minHeight: 620,
     frame: true,
-    backgroundColor: '#0f172a',
+    autoHideMenuBar: true,
+    backgroundColor: '#FDF4EC',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -21,6 +22,7 @@ function createWindow() {
     },
   });
 
+  mainWindow.setMenuBarVisibility(false);
   mainWindow.loadFile(path.join(__dirname, '../src/renderer/index.html'));
 
   mainWindow.on('closed', () => {
